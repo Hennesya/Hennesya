@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+        input[type="text"], input[type="button"] {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Statistical Calculator</h1>
+        <input type="text" id="numbers" placeholder="Enter numbers separated by commas">
+        <input type="button" value="Calculate" onclick="calculateStats()">
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function calculateStats() {
+            var numbersInput = document.getElementById("numbers").value;
+            var numbersArray = numbersInput.split(",").map(Number);
+
+            // Mean
+            var sum = numbersArray.reduce((acc, curr) => acc + curr, 0);
+            var mean = sum / numbersArray.length;
+
+            // Median
+            numbersArray.sort((a, b) => a - b);
+            var median;
+            if (numbersArray.length % 2 === 0) {
+                median = (numbersArray[numbersArray.length / 2 - 1] + numbersArray[numbersArray.length / 2]) / 2;
+            } else {
+                median = numbersArray[Math.floor(numbersArray.length / 2)];
+            }
+
+            // Standard Deviation
+            var meanDifferenceSquared = numbersArray.map(num => Math.pow(num - mean, 2));
+            var standardDeviation = Math.sqrt(meanDifferenceSquared.reduce((acc, curr) => acc + curr, 0) / numbersArray.length);
+
+            // Interquartile Range
+            var q1Index = Math.floor(numbersArray.length * 0.25);
+            var q3Index = Math.floor(numbersArray.length * 0.75);
+            var q1 = numbersArray[q1Index];
+            var q3 = numbersArray[q3Index];
+            var interquartileRange = q3 - q1;
+
+            var results = document.getElementById("results");
+            results.innerHTML = "<p>Mean: " + mean.toFixed(2) + "</p>";
+            results.innerHTML += "<p>Median: " + median.toFixed(2) + "</p>";
+            results.innerHTML += "<p>Standard Deviation: " + standardDeviation.toFixed(2) + "</p>";
+            results.innerHTML += "<p>Interquartile Range: " + interquartileRange.toFixed(2) + "</p>";
+        }
+    </script>
+</body>
+</html>
